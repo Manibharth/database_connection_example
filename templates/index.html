@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexora — Clean & Clear</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #ffffff;
+      --off-white: #f7f7f5;
+      --light-gray: #ebebeb;
+      --mid-gray: #c8c8c8;
+      --dark-gray: #555555;
+      --near-black: #1a1a1a;
+      --black: #0d0d0d;
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Outfit', sans-serif;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,0.07);
+      --shadow-md: 0 8px 40px rgba(0,0,0,0.12);
+      --shadow-lg: 0 24px 80px rgba(0,0,0,0.18);
+      --radius: 3px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--near-black);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--white); }
+    ::-webkit-scrollbar-thumb { background: var(--near-black); border-radius: 2px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: var(--white);
+      border-bottom: 1px solid var(--light-gray);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px; height: 68px;
+      transition: box-shadow var(--transition);
+    }
+    nav.scrolled { box-shadow: var(--shadow-sm); }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--black); text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--dark-gray); font-weight: 400; }
+    .nav-center { display: flex; gap: 36px; list-style: none; }
+    .nav-center a {
+      color: var(--dark-gray); text-decoration: none;
+      font-size: 0.875rem; font-weight: 400; letter-spacing: 0.01em;
+      transition: color var(--transition); position: relative;
+    }
+    .nav-center a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--black);
+      transition: width var(--transition);
+    }
+    .nav-center a:hover { color: var(--black); }
+    .nav-center a:hover::after { width: 100%; }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-login {
+      background: none; border: 1px solid var(--mid-gray);
+      color: var(--near-black); padding: 9px 22px;
+      font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+      border-radius: var(--radius); cursor: pointer;
+      transition: border-color var(--transition), color var(--transition), background var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .btn-login:hover { border-color: var(--near-black); background: var(--near-black); color: var(--white); }
+    .btn-signup {
+      background: var(--black); border: 1px solid var(--black);
+      color: var(--white); padding: 9px 22px;
+      font-family: var(--font-body); font-size: 0.875rem; font-weight: 500;
+      border-radius: var(--radius); cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .btn-signup:hover { background: var(--near-black); transform: translateY(-1px); }
+    .nav-toggle {
+      display: none; background: none; border: none;
+      cursor: pointer; padding: 4px; gap: 5px; flex-direction: column;
+    }
+    .nav-toggle span { display: block; width: 22px; height: 1.5px; background: var(--black); transition: all 0.3s; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; background: var(--off-white);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 100px 60px 80px;
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--light-gray) 1px, transparent 1px),
+        linear-gradient(90deg, var(--light-gray) 1px, transparent 1px);
+      background-size: 60px 60px; opacity: 0.5;
+    }
+    #hero::after {
+      content: ''; position: absolute; top: 0; left: 50%;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--mid-gray) 40%, var(--mid-gray) 60%, transparent);
+      opacity: 0.4;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 780px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--mid-gray); background: var(--white);
+      padding: 6px 16px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--dark-gray); margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--near-black); border-radius: 50%;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -0.03em; color: var(--black); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s;
+    }
+    .hero-title em { font-style: italic; color: var(--dark-gray); }
+    .hero-sub {
+      font-size: 1.05rem; font-weight: 300; line-height: 1.75;
+      color: var(--dark-gray); max-width: 520px; margin: 0 auto 48px;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+    .hero-buttons {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+    .hero-btn-primary {
+      background: var(--black); color: var(--white);
+      padding: 14px 36px; border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.03em; border: 1px solid var(--black); cursor: pointer;
+      transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .hero-btn-primary:hover { background: var(--near-black); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.22); }
+    .hero-btn-secondary {
+      background: var(--white); color: var(--near-black);
+      padding: 14px 36px; border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.03em; border: 1px solid var(--mid-gray); cursor: pointer;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .hero-btn-secondary:hover { border-color: var(--near-black); transform: translateY(-2px); }
+    .hero-scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid-gray);
+      opacity: 0; animation: fadeUp 0.6s ease forwards 1.2s;
+    }
+    .scroll-dot {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--mid-gray), transparent);
+      animation: scrollPulse 1.8s ease infinite;
+    }
+    @keyframes scrollPulse { 0%,100% { opacity:0.4; transform:scaleY(1); } 50% { opacity:1; transform:scaleY(1.2); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+    /* MARQUEE */
+    .marquee-strip {
+      border-top: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--light-gray);
+      overflow: hidden; padding: 16px 0; background: var(--white);
+    }
+    .marquee-track {
+      display: flex; white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 28px; padding: 0 28px;
+      font-size: 0.72rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--mid-gray); font-weight: 500;
+    }
+    .marquee-sep { width: 3px; height: 3px; background: var(--mid-gray); border-radius: 50%; }
+    @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+
+    /* FEATURES */
+    #features { padding: 120px 60px; background: var(--white); }
+    .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+    .section-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid-gray); font-weight: 500; margin-bottom: 12px; }
+    .section-label.center { text-align: center; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+    .section-sub { font-size: 0.9rem; color: var(--dark-gray); max-width: 280px; text-align: right; line-height: 1.7; font-weight: 300; }
+    .features-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--light-gray); }
+    .feature-card {
+      padding: 48px 40px;
+      border-right: 1px solid var(--light-gray);
+      border-bottom: 1px solid var(--light-gray);
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.25s;
+    }
+    .feature-card.visible { opacity: 1; transform: translateY(0); }
+    .feature-card:nth-child(3n) { border-right: none; }
+    .feature-card:nth-last-child(-n+3) { border-bottom: none; }
+    .feature-card:hover { background: var(--off-white); }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 0; height: 2px; background: var(--black);
+      transition: width 0.4s ease;
+    }
+    .feature-card:hover::before { width: 100%; }
+    .feature-num { font-family: var(--font-display); font-size: 3.5rem; font-weight: 700; color: var(--light-gray); line-height: 1; margin-bottom: 28px; }
+    .feature-icon { font-size: 1.6rem; margin-bottom: 18px; }
+    .feature-name { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 12px; }
+    .feature-desc { font-size: 0.875rem; color: var(--dark-gray); line-height: 1.7; font-weight: 300; }
+
+    /* STATS */
+    #stats { background: var(--black); color: var(--white); display: grid; grid-template-columns: repeat(4,1fr); }
+    .stat-cell { padding: 64px 48px; border-right: 1px solid rgba(255,255,255,0.08); text-align: center; }
+    .stat-cell:last-child { border-right: none; }
+    .stat-num { font-family: var(--font-display); font-size: clamp(2.5rem,4vw,3.8rem); font-weight: 700; display: block; margin-bottom: 8px; letter-spacing: -0.03em; }
+    .stat-lbl { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 400; }
+
+    /* CTA */
+    #cta { padding: 120px 60px; background: var(--off-white); border-top: 1px solid var(--light-gray); text-align: center; }
+    .cta-title { font-family: var(--font-display); font-size: clamp(2.5rem,5vw,4.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 24px; }
+    .cta-sub { color: var(--dark-gray); font-size: 1rem; font-weight: 300; line-height: 1.7; max-width: 420px; margin: 0 auto 44px; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    footer { background: var(--black); color: rgba(255,255,255,0.5); padding: 48px 60px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--white); text-decoration: none; }
+    .footer-logo span { color: rgba(255,255,255,0.35); font-weight: 400; }
+    .footer-links { display: flex; gap: 28px; list-style: none; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.07em; transition: color var(--transition); }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 0.78rem; }
+
+    /* MODAL BACKDROP */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.5);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+
+    /* MODAL CARD */
+    .modal {
+      background: var(--white); width: 100%; max-width: 440px;
+      border-radius: 6px; border: 1px solid var(--light-gray);
+      box-shadow: var(--shadow-lg); overflow: hidden;
+      transform: translateY(24px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-backdrop.open .modal { transform: translateY(0) scale(1); }
+    .modal-header { padding: 36px 40px 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .modal-title { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .modal-subtitle { font-size: 0.85rem; color: var(--dark-gray); font-weight: 300; margin-top: 6px; line-height: 1.6; }
+    .modal-close {
+      background: none; border: none; cursor: pointer;
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--dark-gray); font-size: 1.1rem; flex-shrink: 0; margin-top: 2px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .modal-close:hover { background: var(--off-white); color: var(--black); }
+    .modal-body { padding: 32px 40px 40px; }
+
+    /* FORM */
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--near-black); margin-bottom: 8px; }
+    .form-input {
+      width: 100%; padding: 12px 16px;
+      border: 1px solid var(--light-gray); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 300;
+      color: var(--near-black); background: var(--white); outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-input:focus { border-color: var(--near-black); box-shadow: 0 0 0 3px rgba(0,0,0,0.06); }
+    .form-input.error { border-color: #c0392b; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-error { font-size: 0.75rem; color: #c0392b; margin-top: 5px; display: none; font-weight: 400; }
+    .form-error.show { display: block; }
+    .form-checkbox { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 24px; }
+    .form-checkbox input { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--black); cursor: pointer; flex-shrink: 0; }
+    .form-checkbox label { font-size: 0.8rem; color: var(--dark-gray); font-weight: 300; line-height: 1.5; cursor: pointer; }
+    .form-checkbox a { color: var(--near-black); }
+
+    /* FORM BUTTON */
+    .btn-form {
+      width: 100%; padding: 13px;
+      background: var(--black); color: var(--white);
+      border: 1px solid var(--black); border-radius: var(--radius);
+      font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.04em; cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-form:hover { background: var(--near-black); transform: translateY(-1px); }
+    .btn-form:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .btn-spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+    .btn-form.loading .btn-spinner { display: block; }
+    .btn-form.loading .btn-text { opacity: 0.6; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .modal-switch { text-align: center; font-size: 0.82rem; color: var(--dark-gray); margin-top: 20px; }
+    .modal-switch a { color: var(--near-black); font-weight: 500; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+    /* PASSWORD TOGGLE */
+    .input-wrap { position: relative; }
+    .input-wrap .form-input { padding-right: 52px; }
+    .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--mid-gray); font-size: 0.78rem; letter-spacing: 0.05em; font-family: var(--font-body); transition: color var(--transition); padding: 2px; }
+    .pw-toggle:hover { color: var(--near-black); }
+
+    /* STRENGTH BAR */
+    .strength-bar { display: flex; gap: 4px; margin-top: 8px; }
+    .strength-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--light-gray); transition: background 0.3s ease; }
+    .strength-label { font-size: 0.72rem; color: var(--mid-gray); margin-top: 4px; display: block; }
+
+    /* SUCCESS STATE */
+    .modal-success { padding: 60px 40px; text-align: center; display: none; }
+    .success-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .success-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .success-msg { font-size: 0.875rem; color: var(--dark-gray); font-weight: 300; line-height: 1.6; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--black); color: var(--white);
+      padding: 14px 28px; border-radius: 4px;
+      font-size: 0.85rem; font-weight: 400; letter-spacing: 0.02em;
+      box-shadow: var(--shadow-lg); z-index: 9999; opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 880px) {
+      nav { padding: 0 24px; }
+      .nav-center { display: none; }
+      .nav-toggle { display: flex; }
+      .nav-center.open { display: flex; flex-direction: column; position: fixed; inset: 0; top: 68px; background: var(--white); padding: 40px 24px; gap: 20px; z-index: 199; border-top: 1px solid var(--light-gray); }
+      .nav-center.open a { font-size: 1.1rem; }
+      #hero, #features, #cta { padding-left: 24px; padding-right: 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-card { border-right: none; }
+      .feature-card:nth-last-child(-n+3) { border-bottom: 1px solid var(--light-gray); }
+      .feature-card:last-child { border-bottom: none; }
+      #stats { grid-template-columns: repeat(2,1fr); }
+      .stat-cell:nth-child(2) { border-right: none; }
+      .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .section-sub { text-align: left; }
+      footer { flex-direction: column; gap: 20px; padding: 32px 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .modal-header { padding: 28px 24px 0; }
+      .modal-body { padding: 24px 24px 32px; }
+      .modal-success { padding: 48px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Yuan Lang<span>.</span></a>
+    <ul class="nav-center" id="navLinks">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#stats">About</a></li>
+      <li><a href="#cta">Pricing</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login" id="navLoginBtn">Log In</button>
+      <button class="btn-signup" id="navSignupBtn">Create Account</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Now available — Version 2.0</div>
+      <h1 class="hero-title">Build something<br><em>truly great.</em></h1>
+      <p class="hero-sub">A clean, focused platform for designers and developers who care about craft. No clutter. Just clarity.</p>
+      <div class="hero-buttons">
+        <button class="hero-btn-primary" id="heroSignupBtn">Create Free Account</button>
+        <button class="hero-btn-secondary" id="heroLoginBtn">Sign In</button>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-dot"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-header reveal">
+      <div>
+        <p class="section-label">What we offer</p>
+        <h2 class="section-title">Everything you<br>need to ship.</h2>
+      </div>
+      <p class="section-sub">Built with precision. Refined by hundreds of hours of real-world use.</p>
+    </div>
+    <div class="features-grid" id="featuresGrid"></div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats"></section>
+
+  <section id="cta">
+    <div class="reveal">
+      <p class="section-label center">Get started today</p>
+      <h2 class="cta-title">Ready to begin?</h2>
+      <p class="cta-sub">Join thousands of teams who trust Nexora to deliver their best work.</p>
+      <p class="cta-sub">Join thousands of teams who trust Nexora to deliver their best work.</p>
+      <div class="cta-actions">
+        <button class="hero-btn-primary" id="ctaSignupBtn">Create Free Account</button>
+        <button class="hero-btn-secondary" id="ctaLoginBtn">Log In</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="footer-logo">Yuan Lang<span>.</span></a>
+    <ul class="footer-links" id="footerLinks"></ul>
+    <p class="footer-copy">© 2026 Nexora. All rights reserved.</p>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="loginTitle">Welcome back.</h2>
+          <p class="modal-subtitle">Sign in to your account to continue.</p>
+        </div>
+        <button class="modal-close" id="loginClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="loginBody">
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email"/>
+            <p class="form-error" id="loginEmailErr">Please enter a valid email address.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password"/>
+              <button type="button" class="pw-toggle" data-target="loginPassword">Show</button>
+            </div>
+            <p class="form-error" id="loginPasswordErr">Password must be at least 8 characters.</p>
+          </div>
+          <button type="submit" class="btn-form" id="loginSubmit">
+            <div class="btn-spinner"></div>
+            <span class="btn-text">Sign In</span>
+          </button>
+        </form>
+        <div class="modal-switch">Don't have an account? <a id="switchToSignup">Create one</a></div>
+      </div>
+      <div class="modal-success" id="loginSuccess">
+        <div class="success-icon">✓</div>
+        <h3 class="success-title">You're in!</h3>
+        <p class="success-msg">Welcome back. Redirecting you to your dashboard…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP MODAL -->
+  <div class="modal-backdrop" id="signupModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signupTitle">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="signupTitle">Create account.</h2>
+          <p class="modal-subtitle">Free forever. No credit card needed.</p>
+        </div>
+        <button class="modal-close" id="signupClose" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="signupBody">
+        <form id="signupForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="signupFirst">First Name</label>
+              <input class="form-input" type="text" id="signupFirst" placeholder="Jane" autocomplete="given-name"/>
+              <p class="form-error" id="signupFirstErr">First name is required.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signupLast">Last Name</label>
+              <input class="form-input" type="text" id="signupLast" placeholder="Smith" autocomplete="family-name"/>
+              <p class="form-error" id="signupLastErr">Last name is required.</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email</label>
+            <input class="form-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email"/>
+            <p class="form-error" id="signupEmailErr">Please enter a valid email address.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="signupPassword" placeholder="Min. 8 characters" autocomplete="new-password"/>
+              <button type="button" class="pw-toggle" data-target="signupPassword">Show</button>
+            </div>
+            <div class="strength-bar">
+              <div class="strength-seg" id="seg1"></div>
+              <div class="strength-seg" id="seg2"></div>
+              <div class="strength-seg" id="seg3"></div>
+              <div class="strength-seg" id="seg4"></div>
+            </div>
+            <span class="strength-label" id="strengthLabel"></span>
+            <p class="form-error" id="signupPasswordErr">Password must be at least 8 characters.</p>
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="signupTerms"/>
+            <label for="signupTerms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
+          </div>
+          <p class="form-error" id="signupTermsErr" style="margin-top:-16px;margin-bottom:16px;">You must accept the terms to continue.</p>
+          <button type="submit" class="btn-form" id="signupSubmit">
+            <div class="btn-spinner"></div>
+            <span class="btn-text">Create Account</span>
+          </button>
+        </form>
+        <div class="modal-switch">Already have an account? <a id="switchToLogin">Sign in</a></div>
+      </div>
+      <div class="modal-success" id="signupSuccess">
+        <div class="success-icon">🎉</div>
+        <h3 class="success-title">Account created!</h3>
+        <p class="success-msg">Welcome to Nexora. Check your inbox to verify your email and get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       DATA
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    const featuresData = [
+      { num:"01", icon:"◈", name:"Clean Interface",    desc:"Distraction-free workspace with only the tools you actually need — nothing more." },
+      { num:"02", icon:"⬡", name:"Fast by Default",    desc:"Optimised to the core. Sub-second load times on any connection, anywhere." },
+      { num:"03", icon:"✦", name:"Team Collaboration", desc:"Real-time editing, comments, and review flows built for modern teams." },
+      { num:"04", icon:"◉", name:"Version Control",    desc:"Every change tracked automatically. Roll back, compare, or branch at any moment." },
+      { num:"05", icon:"⟡", name:"API Access",         desc:"Full REST and GraphQL API with comprehensive docs and client libraries." },
+      { num:"06", icon:"✧", name:"Analytics Built-In", desc:"Understand what's happening without bolting on a third-party tool." }
+    ];
+
+    const statsData = [
+      { target:50000, suffix:"+",  label:"Active Users",  isFloat:false },
+      { target:99.9,  suffix:"%",  label:"Uptime SLA",    isFloat:true  },
+      { target:140,   suffix:"+",  label:"Countries",     isFloat:false },
+      { target:4.9,   suffix:"★",  label:"Avg Rating",    isFloat:true  }
+    ];
+
+    const marqueeItems = ["Design","Develop","Ship","Iterate","Collaborate","Analyse","Improve","Deliver","Repeat"];
+    const footerLinks  = ["Product","Pricing","Blog","Docs","Careers","Contact"];
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       UTILITY FUNCTIONS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function $(id) { return document.getElementById(id); }
+
+    function showToast(msg, duration = 3200) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+    function isValidPassword(v) { return v.length >= 8; }
+
+    function setFieldError(inputId, errId, show) {
+      const input = $(inputId), err = $(errId);
+      if (!input || !err) return;
+      input.classList.toggle('error', show);
+      err.classList.toggle('show', show);
+    }
+
+    function clearAllErrors(pairs) {
+      pairs.forEach(([inp, err]) => setFieldError(inp, err, false));
+    }
+
+    function setLoading(btnId, on) {
+      const btn = $(btnId);
+      btn.classList.toggle('loading', on);
+      btn.disabled = on;
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       MODAL OPEN / CLOSE FUNCTIONS
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function openModal(id) {
+      $(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        const first = $(id).querySelector('input');
+        if (first) first.focus();
+      }, 350);
+    }
+
+    function closeModal(id) {
+      $(id).classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => resetModal(id), 400);
+    }
+
+    function resetModal(id) {
+      const modal = $(id);
+      // reset form
+      const form = modal.querySelector('form');
+      if (form) form.reset();
+      // hide success, show body
+      modal.querySelectorAll('.modal-success').forEach(s => s.style.display = 'none');
+      modal.querySelectorAll('.modal-body').forEach(b => b.style.display = '');
+      modal.querySelectorAll('.modal-switch').forEach(s => s.style.display = '');
+      // clear error states
+      modal.querySelectorAll('.form-error').forEach(e => e.classList.remove('show'));
+      modal.querySelectorAll('.form-input').forEach(i => i.classList.remove('error'));
+      // reset strength bar
+      if (id === 'signupModal') resetStrength();
+    }
+
+    function showSuccessState(bodyId, successId, switchEl) {
+      $(bodyId).style.display = 'none';
+      if (switchEl) switchEl.style.display = 'none';
+      $(successId).style.display = 'block';
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       LOGIN FORM HANDLER FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email    = $('loginEmail').value.trim();
+      const password = $('loginPassword').value;
+
+      clearAllErrors([
+        ['loginEmail',    'loginEmailErr'],
+        ['loginPassword', 'loginPasswordErr']
+      ]);
+
+      let valid = true;
+      if (!isValidEmail(email))       { setFieldError('loginEmail',    'loginEmailErr',    true); valid = false; }
+      if (!isValidPassword(password)) { setFieldError('loginPassword', 'loginPasswordErr', true); valid = false; }
+      if (!valid) return;
+
+      setLoading('loginSubmit', true);
+
+      try {
+        // Fetch CSRF token first
+        const csrfRes = await fetch('/api/csrf');
+        const { csrf_token } = await csrfRes.json();
+
+        const res  = await fetch('/api/login', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ email, password, csrf_token })
+        });
+        const data = await res.json();
+
+        setLoading('loginSubmit', false);
+
+        if (data.success) {
+          const sw = $('loginModal').querySelector('.modal-switch');
+          showSuccessState('loginBody', 'loginSuccess', sw);
+          setTimeout(() => { window.location.href = data.redirect; }, 1400);
+        } else {
+          // Show server error under password field
+          const errEl = $('loginPasswordErr');
+          errEl.textContent = data.message;
+          errEl.classList.add('show');
+          $('loginPassword').classList.add('error');
+        }
+      } catch (err) {
+        setLoading('loginSubmit', false);
+        showToast('Network error. Please try again.');
+      }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SIGNUP FORM HANDLER FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    async function handleSignup(e) {
+      e.preventDefault();
+      const first    = $('signupFirst').value.trim();
+      const last     = $('signupLast').value.trim();
+      const email    = $('signupEmail').value.trim();
+      const password = $('signupPassword').value;
+      const terms    = $('signupTerms').checked;
+
+      clearAllErrors([
+        ['signupFirst',    'signupFirstErr'],
+        ['signupLast',     'signupLastErr'],
+        ['signupEmail',    'signupEmailErr'],
+        ['signupPassword', 'signupPasswordErr']
+      ]);
+      $('signupTermsErr').classList.remove('show');
+
+      let valid = true;
+      if (!first)                    { setFieldError('signupFirst',    'signupFirstErr',    true); valid = false; }
+      if (!last)                     { setFieldError('signupLast',     'signupLastErr',     true); valid = false; }
+      if (!isValidEmail(email))      { setFieldError('signupEmail',    'signupEmailErr',    true); valid = false; }
+      if (!isValidPassword(password)){ setFieldError('signupPassword', 'signupPasswordErr', true); valid = false; }
+      if (!terms)                    { $('signupTermsErr').classList.add('show'); valid = false; }
+      if (!valid) return;
+
+      setLoading('signupSubmit', true);
+
+      try {
+        // Fetch CSRF token first
+        const csrfRes = await fetch('/api/csrf');
+        const { csrf_token } = await csrfRes.json();
+
+        const res  = await fetch('/api/signup', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ full_name: first + ' ' + last, email, password, csrf_token })
+        });
+        const data = await res.json();
+
+        setLoading('signupSubmit', false);
+
+        if (data.success) {
+          const sw = $('signupModal').querySelector('.modal-switch');
+          showSuccessState('signupBody', 'signupSuccess', sw);
+          setTimeout(() => { window.location.href = data.redirect; }, 1600);
+        } else {
+          // Map common server errors back to the right field
+          if (data.message.toLowerCase().includes('email')) {
+            const errEl = $('signupEmailErr');
+            errEl.textContent = data.message;
+            errEl.classList.add('show');
+            $('signupEmail').classList.add('error');
+          } else {
+            showToast(data.message);
+          }
+        }
+      } catch (err) {
+        setLoading('signupSubmit', false);
+        showToast('Network error. Please try again.');
+      }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PASSWORD TOGGLE FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function initPasswordToggles() {
+      document.querySelectorAll('.pw-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const input = $(btn.dataset.target);
+          if (!input) return;
+          const hidden = input.type === 'password';
+          input.type = hidden ? 'text' : 'password';
+          btn.textContent = hidden ? 'Hide' : 'Show';
+        });
+      });
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       PASSWORD STRENGTH FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function scorePassword(pw) {
+      let s = 0;
+      if (pw.length >= 8)  s++;
+      if (pw.length >= 12) s++;
+      if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) s++;
+      if (/\d/.test(pw)) s++;
+      if (/[^A-Za-z0-9]/.test(pw)) s++;
+      if (s <= 1) return { level:1, label:'Weak',   color:'#c0392b' };
+      if (s <= 2) return { level:2, label:'Fair',   color:'#d4800a' };
+      if (s <= 3) return { level:3, label:'Good',   color:'#2980b9' };
+      return             { level:4, label:'Strong', color:'#27ae60' };
+    }
+
+    function resetStrength() {
+      ['seg1','seg2','seg3','seg4'].forEach(id => $(id).style.background = '');
+      $('strengthLabel').textContent = '';
+    }
+
+    function initStrengthMeter() {
+      $('signupPassword').addEventListener('input', function () {
+        if (!this.value) { resetStrength(); return; }
+        const { level, label, color } = scorePassword(this.value);
+        ['seg1','seg2','seg3','seg4'].forEach((id, i) => {
+          $(id).style.background = i < level ? color : 'var(--light-gray)';
+        });
+        $('strengthLabel').textContent = label;
+        $('strengthLabel').style.color = color;
+      });
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       NAVBAR FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function initNavbar() {
+      const nav    = $('navbar');
+      const toggle = $('navToggle');
+      const links  = $('navLinks');
+
+      window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+
+      toggle.addEventListener('click', () => {
+        const open = links.classList.toggle('open');
+        const spans = toggle.querySelectorAll('span');
+        spans[0].style.transform = open ? 'rotate(45deg) translate(4px,4px)' : '';
+        spans[1].style.opacity   = open ? '0' : '';
+        spans[2].style.transform = open ? 'rotate(-45deg) translate(4px,-4px)' : '';
+      });
+
+      links.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          links.classList.remove('open');
+          toggle.querySelectorAll('span').forEach(s => { s.style.transform=''; s.style.opacity=''; });
+        });
+      });
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       MARQUEE FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function initMarquee() {
+      const doubled = [...marqueeItems, ...marqueeItems];
+      $('marqueeTrack').innerHTML = doubled.map(item =>
+        `<span class="marquee-item">${item}<span class="marquee-sep"></span></span>`
+      ).join('');
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       FEATURES RENDER FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function renderFeatures() {
+      $('featuresGrid').innerHTML = featuresData.map((f, i) => `
+        <div class="feature-card" style="transition-delay:${i * 70}ms">
+          <div class="feature-num">${f.num}</div>
+          <div class="feature-icon">${f.icon}</div>
+          <h3 class="feature-name">${f.name}</h3>
+          <p class="feature-desc">${f.desc}</p>
+        </div>`).join('');
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       STATS COUNTER FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function animateCounter(el, target, suffix, isFloat, duration = 1600) {
+      let start = null;
+      (function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = isFloat
+          ? (eased * target).toFixed(1)
+          : Math.floor(eased * target).toLocaleString();
+        el.textContent = val + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }
+
+    function renderStats() {
+      $('stats').innerHTML = statsData.map((s, i) => `
+        <div class="stat-cell">
+          <span class="stat-num" id="sn${i}">0${s.suffix}</span>
+          <p class="stat-lbl">${s.label}</p>
+        </div>`).join('');
+    }
+
+    function initStatsObserver() {
+      let fired = false;
+      new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && !fired) {
+          fired = true;
+          statsData.forEach((s, i) => animateCounter($(`sn${i}`), s.target, s.suffix, !!s.isFloat));
+        }
+      }, { threshold: 0.4 }).observe($('stats'));
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       FOOTER RENDER FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function renderFooter() {
+      $('footerLinks').innerHTML = footerLinks.map(l => `<li><a href="#">${l}</a></li>`).join('');
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SCROLL REVEAL FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function initScrollReveal() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal, .feature-card').forEach(el => obs.observe(el));
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       SMOOTH SCROLL FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function initSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          const t = document.querySelector(a.getAttribute('href'));
+          if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth', block:'start' }); }
+        });
+      });
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       BUTTON WIRING FUNCTION
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function wireButtons() {
+      // Login openers
+      ['navLoginBtn','heroLoginBtn','ctaLoginBtn'].forEach(id => {
+        const el = $(id); if (el) el.addEventListener('click', () => openModal('loginModal'));
+      });
+      // Signup openers
+      ['navSignupBtn','heroSignupBtn','ctaSignupBtn'].forEach(id => {
+        const el = $(id); if (el) el.addEventListener('click', () => openModal('signupModal'));
+      });
+      // Close buttons
+      $('loginClose').addEventListener('click',  () => closeModal('loginModal'));
+      $('signupClose').addEventListener('click', () => closeModal('signupModal'));
+      // Form submit handlers
+      $('loginForm').addEventListener('submit',  handleLogin);
+      $('signupForm').addEventListener('submit', handleSignup);
+      // Switch modals
+      $('switchToSignup').addEventListener('click', () => { closeModal('loginModal');  setTimeout(() => openModal('signupModal'), 220); });
+      $('switchToLogin').addEventListener('click',  () => { closeModal('signupModal'); setTimeout(() => openModal('loginModal'),  220); });
+      // Backdrop click to close
+      ['loginModal','signupModal'].forEach(id => {
+        $(id).addEventListener('click', e => { if (e.target === $(id)) closeModal(id); });
+      });
+      // Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          if ($('loginModal').classList.contains('open'))  closeModal('loginModal');
+          if ($('signupModal').classList.contains('open')) closeModal('signupModal');
+        }
+      });
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       INIT — master entry function
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+    function init() {
+      initNavbar();
+      initMarquee();
+      renderFeatures();
+      renderStats();
+      renderFooter();
+      wireButtons();
+      initPasswordToggles();
+      initStrengthMeter();
+      initSmoothScroll();
+      requestAnimationFrame(() => setTimeout(initScrollReveal, 80));
+      setTimeout(initStatsObserver, 200);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

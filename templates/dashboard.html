@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Nexora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --white:#fff; --off-white:#f7f7f5; --light-gray:#ebebeb;
+      --mid-gray:#c8c8c8; --dark-gray:#555; --near-black:#1a1a1a; --black:#0d0d0d;
+      --font-display:'Playfair Display',serif; --font-body:'Outfit',sans-serif;
+      --radius:3px; --transition:0.25s cubic-bezier(.4,0,.2,1);
+    }
+    body { font-family:var(--font-body); background:var(--off-white); color:var(--near-black); min-height:100vh; }
+
+    nav {
+      background:var(--white); border-bottom:1px solid var(--light-gray);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 60px; height:68px; position:sticky; top:0; z-index:10;
+      box-shadow:0 2px 12px rgba(0,0,0,.07);
+    }
+    .nav-logo { font-family:var(--font-display); font-size:1.5rem; font-weight:700; color:var(--black); text-decoration:none; }
+    .nav-logo span { color:var(--dark-gray); font-weight:400; }
+    .nav-right { display:flex; align-items:center; gap:20px; font-size:.875rem; }
+    .nav-right span { color:var(--dark-gray); }
+    .btn-logout {
+      background:none; border:1px solid var(--mid-gray); color:var(--near-black);
+      padding:8px 20px; border-radius:var(--radius); cursor:pointer;
+      font-family:var(--font-body); font-size:.85rem; font-weight:500;
+      transition:all var(--transition); text-decoration:none; display:inline-block;
+    }
+    .btn-logout:hover { border-color:var(--near-black); background:var(--near-black); color:var(--white); }
+
+    .dashboard { max-width:960px; margin:60px auto; padding:0 24px; }
+
+    .welcome-card {
+      background:var(--white); border:1px solid var(--light-gray);
+      border-radius:6px; padding:48px 52px; margin-bottom:32px;
+      box-shadow:0 8px 40px rgba(0,0,0,.06);
+    }
+    .welcome-card h1 {
+      font-family:var(--font-display); font-size:2.4rem; font-weight:700;
+      letter-spacing:-.02em; margin-bottom:10px;
+    }
+    .welcome-card h1 em { font-style:italic; color:var(--dark-gray); }
+    .welcome-card p { color:var(--dark-gray); font-size:1rem; line-height:1.7; }
+
+    .info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; }
+    .info-tile {
+      background:var(--white); border:1px solid var(--light-gray);
+      border-radius:6px; padding:28px 32px;
+    }
+    .info-tile .label { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mid-gray); margin-bottom:8px; }
+    .info-tile .value { font-size:1.05rem; font-weight:500; color:var(--near-black); word-break:break-all; }
+
+    @media(max-width:600px){
+      nav { padding:0 24px; }
+      .welcome-card { padding:32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">Nexora<span>.</span></a>
+  <div class="nav-right">
+    <span>Hello, {{ full_name }}!</span>
+    <a href="/api/logout" class="btn-logout">Log out</a>
+  </div>
+</nav>
+
+<main class="dashboard">
+  <div class="welcome-card">
+    <h1>Welcome back, <em>{{ full_name }}</em></h1>
+    <p>You are successfully logged in. This is your Nexora dashboard.</p>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-tile">
+      <div class="label">Full Name</div>
+      <div class="value">{{ full_name }}</div>
+    </div>
+    <div class="info-tile">
+      <div class="label">Email</div>
+      <div class="value">{{ email }}</div>
+    </div>
+    <div class="info-tile">
+      <div class="label">Status</div>
+      <div class="value">✓ Active</div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
